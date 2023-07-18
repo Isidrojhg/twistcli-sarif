@@ -45,8 +45,8 @@ def format_sarif(twistcli_version, results_file):
             cvss = vc.get("cvss")
             if not cvss:
             # otherwise severity, if exists
-            rule["properties"] = {
-                "security-severity": SEVERITY_TO_SCORE.get(vc.severity.name.lower(), "0.0"),
+               rule["properties"] = {
+                   "security-severity": SEVERITY_TO_SCORE.get(vc.severity.name.lower(), "0.0"),
             }
             result = {
                 'ruleId': f"{vc['id']}",
