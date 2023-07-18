@@ -1,6 +1,15 @@
 import json
 import argparse
 
+
+SEVERITY_TO_SCORE = {
+    "critical": "10.0",
+    "high": "8.9",
+    "medium": "6.9",
+    "low": "3.9",
+    "none": "0.0",
+}
+
 def format_sarif(twistcli_version, results_file):
     with open(results_file, 'r') as file:
         scan = json.load(file)
@@ -33,6 +42,12 @@ def format_sarif(twistcli_version, results_file):
                 },
             }
 
+            cvss = vc.get("cvss")
+            if not cvss:
+            # otherwise severity, if exists
+            rule["properties"] = {
+                "security-severity": SEVERITY_TO_SCORE.get(vc.severity.name.lower(), "0.0"),
+            }
             result = {
                 'ruleId': f"{vc['id']}",
                 'level': 'warning',
